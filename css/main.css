@@ -1,0 +1,33 @@
+* {
+	transition: 0.15s ease;
+	box-sizing: border-box;
+}
+
+*:hover {
+	box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+body {
+	cursor: pointer;
+}
+
+.is-selected {
+	box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.ui-wrap {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #f3f3f3;
+	font-size: 25px;
+}
+
+.command-suggestion {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: #CCC;
+	z-index: -1;
+}
