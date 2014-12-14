@@ -6,10 +6,14 @@ var currentKbdInput = '',
 	rules = {},
 	MAX_HISTORY_SIZE = 300,
 	commandHistory = [],
-	defaultCommands = ['edit', 'add div', 'remove', 'restart'];
+	htmlCodemirror, cssCodemirror,
+	defaultCommands = ['edit', 'add div', 'remove', 'restart', 'code'];
 
 var commandEl = document.querySelector('#js-command'),
-	commandSuggestionEl = document.querySelector('#js-command-suggestion');
+	commandSuggestionEl = document.querySelector('#js-command-suggestion'),
+	codeWrapEl = document.querySelector('#js-code-wrap'),
+	htmlCodeEl = document.querySelector('#js-html-code'),
+	cssCodeEl = document.querySelector('#js-css-code');
 
 function handleKbdCommands () {
 	var match;
@@ -37,6 +41,9 @@ function handleKbdCommands () {
 
 	else if (match = currentKbdInput.match(REGEX_RESTART)) {
 		restart();
+	}
+	else if (match = currentKbdInput.match(REGEX_SHOW_CODE)) {
+		showCode();
 	}
 }
 
@@ -77,7 +84,7 @@ function addCSS(el, prop, value) {
 	var firstClass = el.classList[0],
 		rule;
 
-	$(selectedEl).css(prop, value)
+	$(selectedEl).css(prop, value);
 }
 
 function edit(el) {
@@ -162,6 +169,30 @@ function getBestMatchingCommandFromHistory(command) {
 	}
 }
 
+function escapeHTML(html) {
+	return html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+function showCode() {
+	// Get all <body> children except last one.
+	var bodyChildren = Array.prototype.slice.call(document.body.children, 1);
+	var allHtml = bodyChildren.reduce(function reduceCallback(html, el) {
+		return el.outerHTML + html;
+	}, '');
+	// allHtml = escapeHTML(allHtml);
+
+	htmlCodemirror.setValue(allHtml);
+	setTimeout(function () {
+		htmlCodemirror.refresh();
+	}, 100);
+
+
+	codeWrapEl.classList.add('show');
+}
+
+function hideCode() {
+	codeWrapEl.classList.remove('show')
+}
+
 function onKeyPress(e, character) {
 	// Don't record keypresses when editing something.
 	if (isElementBeingEdited()) return;
@@ -201,6 +232,7 @@ function onKeyUp(e) {
 	// Escape key
 	if (e.which === 27) {
 		edit(null); // Unedit current element.
+		hideCode();
 	}
 	// Backspace key
 	else if (e.which === 8) {
@@ -229,10 +261,17 @@ function init() {
 	document.head.appendChild(style);
 	styleSheet = style.sheet;
 
+	htmlCodemirror = CodeMirror.fromTextArea(document.querySelector('#js-html-code'), {
+		lineNumbers: true,
+		lineWrapping: true,
+		readOnly: true,
+		tabMode: "indent"
+	});
+
 	document.addEventListener('keypress', onKeyPress);
 	document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);
-	window.addEventListener('click', onMouseClick);
+	//window.addEventListener('click', onMouseClick);
 }
 
 function log() {

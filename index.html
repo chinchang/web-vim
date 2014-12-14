@@ -10,12 +10,24 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="lib/codemirror/lib/codemirror.css">
+
         <script src="lib/jquery-2.1.1.js"></script>
+        <script src="lib/codemirror/lib/codemirror.js"></script>
+        <script src="lib/codemirror/mode/xml/xml.js"></script>
+        <script src="lib/codemirror/mode/css/css.js"></script>
+
     </head>
     <body>
         <div class="ui-wrap">
             <pre id="js-command" class="command"></pre>
             <pre id="js-command-suggestion" class="command-suggestion"></pre>
+
+            <div id="js-code-wrap" class="code-wrap">
+                <textarea id="js-html-code" class="html-code"></textarea>
+                <div id="js-css-code" class="css-code"></div>
+            </div>
+
             <script src="js/commands.js"></script>
             <script src="js/main.js"></script>
         </div>

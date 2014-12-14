@@ -1,11 +1,10 @@
 * {
-	transition: 0.15s ease;
 	box-sizing: border-box;
 }
 
-*:hover {
+/**:hover {
 	box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.2);
-}
+}*/
 
 body {
 	cursor: pointer;
@@ -30,4 +29,25 @@ body {
 	left: 0;
 	color: #CCC;
 	z-index: -1;
+}
+
+.code-wrap {
+	position: fixed;
+	top: 40px;
+	bottom: 40px;
+	left: 40px;
+	right: 40px;
+	background: white;
+	box-shadow: 0 0px 0px 40px rgba(255, 255, 255, 0.9);
+	border: 1px solid #CCC;
+	visibility: hidden;
+	opacity: 0;
+	transform: scale(1.2);
+	transition: 0.25s ease;
+}
+
+.code-wrap.show {
+	visibility: visible;
+	opacity: 1;
+	transform: scale(1);
 }
