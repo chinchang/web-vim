@@ -5,7 +5,7 @@ var currentKbdInput = '',
 	styleSheet,
 	rules = {},
 	MAX_HISTORY_SIZE = 300,
-	commandHistory = [],
+	commandHistory = ['padding:', 'margin:', 'color:'],
 	htmlCodemirror, cssCodemirror,
 	defaultCommands = ['edit', 'add div', 'remove', 'restart', 'code'];
 
@@ -156,29 +156,38 @@ function addToHistory(command) {
 // Returns lastest that starts with the passed `command`.
 function getBestMatchingCommandFromHistory(command) {
 	if (!command) return false;
+	var commandRegex = new RegExp('^' + escapeForRegex(command));
 
 	for (var i = commandHistory.length; i--;) {
-		if ((new RegExp('^' + command.replace(/(\+|=|\[)/g, '\\$1'))).test(commandHistory[i])) {
+		if (commandRegex.test(commandHistory[i])) {
 			return commandHistory[i];
 		}
 	}
 	for (var i = defaultCommands.length; i--;) {
-		if ((new RegExp('^' + command.replace(/(\+|=|\[)/g, '\\$1'))).test(defaultCommands[i])) {
+		if (commandRegex.test(defaultCommands[i])) {
 			return defaultCommands[i];
 		}
 	}
 }
 
+function escapeForRegex(str) {
+	return str.replace(/(\(|\)|\+|=|\[)/g, '\\$1');
+}
 function escapeHTML(html) {
 	return html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
+
+function cleanHTML(html) {
+	return html.replace(/is-selected/g, '');
+}
+
 function showCode() {
 	// Get all <body> children except last one.
 	var bodyChildren = Array.prototype.slice.call(document.body.children, 1);
 	var allHtml = bodyChildren.reduce(function reduceCallback(html, el) {
 		return el.outerHTML + html;
 	}, '');
-	// allHtml = escapeHTML(allHtml);
+	allHtml = cleanHTML(allHtml);
 
 	htmlCodemirror.setValue(allHtml);
 	setTimeout(function () {
@@ -211,8 +220,10 @@ function onKeyPress(e, character) {
 }
 
 function onKeyDown(e) {
-	// Tab key.
+	// Tab key selects the current suggestion, if any.
 	if (e.which === 9) {
+		e.preventDefault();
+		if (!matchingCommand) return;
 		currentKbdInput = matchingCommand;
 		updateCommandUI();
 		e.preventDefault();
@@ -237,6 +248,7 @@ function onKeyUp(e) {
 	// Backspace key
 	else if (e.which === 8) {
 		currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+		e.preventDefault();
 	}
 	// Arrow keys
 	else if ({37: 1, 38: 1, 39: 1, 40: 1}[e.which]) {
@@ -271,6 +283,7 @@ function init() {
 	document.addEventListener('keypress', onKeyPress);
 	document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);
+	document.body.classList.add('is-loaded');
 	//window.addEventListener('click', onMouseClick);
 }
 
@@ -279,4 +292,6 @@ function log() {
 	console.log.apply(console, [].splice.call(arguments, 0));
 }
 
-init();
+window.addEventListener('load', function onLoad() {
+	init();
+})
