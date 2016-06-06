@@ -198,27 +198,6 @@ function hideCode() {
 	codeWrapEl.classList.remove('show')
 }
 
-function onKeyPress(e, character) {
-	// Don't record keypresses when editing something.
-	if (isElementBeingEdited()) return;
-
-	var c = character || String.fromCharCode(e.which).toLowerCase();
-	currentKbdInput = commandEl.value;
-
-	// remove ; from end
-	if (c === COMMAND_END_CHAR) {
-		// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
-	}
-	if (c === COMMAND_END_CHAR || e.which === 13) {
-		handleKbdCommands();
-		addToHistory(currentKbdInput);
-		currentKbdInput = '';
-		commandEl.value = currentKbdInput;
-	}
-
-	updateCommandUI();
-}
-
 function onKeyDown(e) {
 	// Tab key selects the current suggestion, if any.
 	if (e.which === 9) {
@@ -231,15 +210,34 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-		// Escape key
+	// Don't record keypresses when editing something.
+	if (isElementBeingEdited()) return;
+
+	// Escape key
 	if (e.which === 27) {
 		edit(null); // Unedit current element.
 		hideCode();
 		commandEl.focus();
+		return;
 	}
 	// Arrow keys navigate the DOM...only if user isn't typing any command
 	else if ({37: 1, 38: 1, 39: 1, 40: 1}[e.which] && !commandEl.value) {
 		navigate(e.which);
+		return;
+	}
+
+	var c = String.fromCharCode(e.which).toLowerCase();
+	currentKbdInput = commandEl.value;
+
+	// remove ; from end
+	if (c === COMMAND_END_CHAR) {
+		// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+	}
+	if (c === COMMAND_END_CHAR || e.which === 13) {
+		handleKbdCommands();
+		addToHistory(currentKbdInput);
+		currentKbdInput = '';
+		commandEl.value = currentKbdInput;
 	}
 
 	updateCommandUI();
@@ -269,7 +267,6 @@ function init() {
 		}
 	});
 
-	document.addEventListener('keypress', onKeyPress);
 	document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);
 	document.body.classList.add('is-loaded');
