@@ -218,12 +218,15 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-	// Don't record keypresses when editing something.
-	if (isElementBeingEdited()) return;
+	// Don't record keypresses when editing something, except escape key
+	if (isElementBeingEdited() && e.which === 27) {
+		edit(null); // Unedit current element.
+		commandEl.focus();
+		return;
+	}
 
 	// Escape key
 	if (e.which === 27) {
-		edit(null); // Unedit current element.
 		hideCode();
 		if (about.classList.contains('is-open')) {
 			toggleAbout();
