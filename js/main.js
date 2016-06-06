@@ -282,7 +282,7 @@ function init() {
 			'Select elements using arrow keys'
 		],
 		options: {
-			letterDelay: 60,
+			letterDelay: 50,
 			loop: true,
 		}
 	});
