@@ -113,7 +113,7 @@ body {
 	line-height: 60px;
 	font-size: 30px;
 	transition: 0.3s ease;
-	border: 2px solid rgba(255,255,255,0.9);
+	/*border: 1px solid rgba(255,255,255,0.9);*/
 }
 .about-close-btn {
 	opacity: 0;
