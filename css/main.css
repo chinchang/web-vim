@@ -23,20 +23,31 @@ body {
 	color: white;
 	font-size: 25px;
 	box-shadow: 0 -2px 2px rgba(0,0,0,.2);
-	transform: translateY(100%);
-	transition: transform 0.25s ease 0.4s;
+	bottom: -100px;
+	/*transform: translateY(100%);*/
+	transition: bottom 0.25s ease 0.4s;
 }
 .is-loaded .ui-wrap {
-	transform: translateY(0);
+	bottom: 0;
+	/*transform: translateY(0);*/
 }
 
+.command-input, .command-suggestion {
+	background: transparent;
+	font-size: 24px;
+	padding: 10px;
+	border: 0;
+	color: white;
+	outline: 0;
+	width: 99vw;
+}
 .command-suggestion {
 	position: absolute;
 	top: 0;
 	left: 0;
-	color: #FFF;
 	opacity: 0.5;
 	z-index: -1;
+	pointer-events: none;
 }
 
 .code-wrap {
@@ -58,4 +69,7 @@ body {
 	visibility: visible;
 	opacity: 1;
 	transform: scale(1);
+}
+::-webkit-input-placeholder {
+   color: rgba(255,255,255,0.5);
 }

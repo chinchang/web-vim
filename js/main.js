@@ -5,8 +5,7 @@ var currentKbdInput = '',
 	styleSheet,
 	rules = {},
 	MAX_HISTORY_SIZE = 300,
-	commandHistory = ['padding:', 'margin:', 'color:'],
-	htmlCodemirror, cssCodemirror,
+	commandHistory = ['padding: ', 'margin: ', 'color: ', 'border: '],
 	defaultCommands = ['edit', 'add div', 'remove', 'restart', 'code'];
 
 var commandEl = document.querySelector('#js-command'),
@@ -19,7 +18,7 @@ function handleKbdCommands () {
 	var match;
 
 	// Strip COMMAND_END_CHAR from end.
-	currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+	// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
 
 	if (match = currentKbdInput.match(REGEX_CLEAR)) {}
 
@@ -141,8 +140,8 @@ function isElementBeingEdited () {
 function updateCommandUI() {
 	matchingCommand = getBestMatchingCommandFromHistory(currentKbdInput);
 
-	commandEl.innerHTML = '> ' + currentKbdInput;
-	commandSuggestionEl.innerHTML = '> ' + (matchingCommand || '');
+	// commandEl.value = currentKbdInput;
+	commandSuggestionEl.value = (matchingCommand || '');
 }
 
 function addToHistory(command) {
@@ -189,11 +188,8 @@ function showCode() {
 	}, '');
 	allHtml = cleanHTML(allHtml);
 
-	htmlCodemirror.setValue(allHtml);
-	setTimeout(function () {
-		htmlCodemirror.refresh();
-	}, 100);
-
+	$(codeWrapEl).find('code').html(escapeHTML(allHtml));
+	Prism.highlightAll()
 
 	codeWrapEl.classList.add('show');
 }
@@ -202,57 +198,46 @@ function hideCode() {
 	codeWrapEl.classList.remove('show')
 }
 
-function onKeyPress(e, character) {
-	// Don't record keypresses when editing something.
-	if (isElementBeingEdited()) return;
-	if (e && e.which === 13) return;
-
-	var c = character || String.fromCharCode(e.which).toLowerCase();
-	currentKbdInput += c;
-
-	if (c === COMMAND_END_CHAR) {
-		handleKbdCommands();
-		addToHistory(currentKbdInput);
-		currentKbdInput = '';
-	}
-
-	updateCommandUI();
-}
-
 function onKeyDown(e) {
 	// Tab key selects the current suggestion, if any.
 	if (e.which === 9) {
 		e.preventDefault();
 		if (!matchingCommand) return;
 		currentKbdInput = matchingCommand;
+		commandEl.value = currentKbdInput;
 		updateCommandUI();
-		e.preventDefault();
 	}
 }
 
 function onKeyUp(e) {
-	// Enter key
-	if (e.which === 13) {
-		// Do auto completion.
-		if (matchingCommand) {
-			currentKbdInput = matchingCommand;
-			onKeyPress(null, ';');
-		}
-	}
+	// Don't record keypresses when editing something.
+	if (isElementBeingEdited()) return;
 
 	// Escape key
 	if (e.which === 27) {
 		edit(null); // Unedit current element.
 		hideCode();
+		commandEl.focus();
+		return;
 	}
-	// Backspace key
-	else if (e.which === 8) {
-		currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
-		e.preventDefault();
-	}
-	// Arrow keys
-	else if ({37: 1, 38: 1, 39: 1, 40: 1}[e.which]) {
+	// Arrow keys navigate the DOM...only if user isn't typing any command
+	else if ({37: 1, 38: 1, 39: 1, 40: 1}[e.which] && !commandEl.value) {
 		navigate(e.which);
+		return;
+	}
+
+	var c = String.fromCharCode(e.which).toLowerCase();
+	currentKbdInput = commandEl.value;
+
+	// remove ; from end
+	if (c === COMMAND_END_CHAR) {
+		// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+	}
+	if (c === COMMAND_END_CHAR || e.which === 13) {
+		handleKbdCommands();
+		addToHistory(currentKbdInput);
+		currentKbdInput = '';
+		commandEl.value = currentKbdInput;
 	}
 
 	updateCommandUI();
@@ -273,14 +258,15 @@ function init() {
 	document.head.appendChild(style);
 	styleSheet = style.sheet;
 
-	htmlCodemirror = CodeMirror.fromTextArea(document.querySelector('#js-html-code'), {
-		lineNumbers: true,
-		lineWrapping: true,
-		readOnly: true,
-		tabMode: "indent"
+	superplaceholder({
+		el: commandEl,
+		sentences: [ 'Type in commands to create HTML', 'add div', 'border: 2px solid;'],
+		options: {
+			letterDelay: 80,
+			loop: true,
+		}
 	});
 
-	document.addEventListener('keypress', onKeyPress);
 	document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);
 	document.body.classList.add('is-loaded');
