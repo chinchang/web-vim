@@ -21,7 +21,7 @@ body {
 	right: 0;
 	background: #E53935;
 	color: white;
-	font-size: 25px;
+	font-size: 20px;
 	border: 2px solid rgba(0,0,0,0.15);
 	box-shadow: 0 -2px 2px rgba(0,0,0,.2);
 	bottom: -100px;
@@ -31,10 +31,19 @@ body {
 .is-loaded .ui-wrap {
 	bottom: 0;
 }
+.ui-wrap h3 {
+	color: rgba(0, 0, 0, 0.5);
+	margin: 30px 0;
+}
 .ui-wrap a {
 	color: rgba(0, 0, 0, 0.4);
 }
-
+.ui-wrap code {
+	color: rgba(0, 0, 0, 0.5);
+}
+.ui-wrap li {
+	list-style: none;
+}
 .command-input, .command-suggestion {
 	background: transparent;
 	font-size: 24px;
@@ -80,7 +89,7 @@ body {
 	position: fixed;
 	left: 0; right: 0;
 	top: 0; bottom: 0;
-	background: skyblue;
+	background: mediumpurple;
 	text-align: center;
 	-webkit-clip-path: circle(0px at right 60px bottom 100px);
 	-webkit-clip-path: circle(30px at right 60px bottom 100px);
