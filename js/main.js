@@ -5,7 +5,7 @@ var currentKbdInput = '',
 	styleSheet,
 	rules = {},
 	MAX_HISTORY_SIZE = 300,
-	commandHistory = ['padding:', 'margin:', 'color:'],
+	commandHistory = ['padding: ', 'margin: ', 'color: ', 'border: '],
 	defaultCommands = ['edit', 'add div', 'remove', 'restart', 'code'];
 
 var commandEl = document.querySelector('#js-command'),
@@ -231,17 +231,11 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-	// Enter key
-
-	// Escape key
+		// Escape key
 	if (e.which === 27) {
 		edit(null); // Unedit current element.
 		hideCode();
-	}
-	// Backspace key
-	else if (e.which === 8) {
-		// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
-		e.preventDefault();
+		commandEl.focus();
 	}
 	// Arrow keys navigate the DOM...only if user isn't typing any command
 	else if ({37: 1, 38: 1, 39: 1, 40: 1}[e.which] && !commandEl.value) {
@@ -265,6 +259,15 @@ function init() {
 	style.appendChild(document.createTextNode(""));
 	document.head.appendChild(style);
 	styleSheet = style.sheet;
+
+	superplaceholder({
+		el: commandEl,
+		sentences: [ 'Type in commands to create HTML', 'add div', 'border: 2px solid;'],
+		options: {
+			letterDelay: 80,
+			loop: true,
+		}
+	});
 
 	document.addEventListener('keypress', onKeyPress);
 	document.addEventListener('keydown', onKeyDown);

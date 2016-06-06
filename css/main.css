@@ -39,6 +39,7 @@ body {
 	border: 0;
 	color: white;
 	outline: 0;
+	width: 99vw;
 }
 .command-suggestion {
 	position: absolute;
@@ -68,4 +69,7 @@ body {
 	visibility: visible;
 	opacity: 1;
 	transform: scale(1);
+}
+::-webkit-input-placeholder {
+   color: rgba(255,255,255,0.5);
 }
