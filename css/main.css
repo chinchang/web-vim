@@ -22,14 +22,17 @@ body {
 	background: #E53935;
 	color: white;
 	font-size: 25px;
+	border: 2px solid rgba(0,0,0,0.15);
 	box-shadow: 0 -2px 2px rgba(0,0,0,.2);
 	bottom: -100px;
-	/*transform: translateY(100%);*/
+	font-family: Helvetica, Arial;
 	transition: bottom 0.25s ease 0.4s;
 }
 .is-loaded .ui-wrap {
 	bottom: 0;
-	/*transform: translateY(0);*/
+}
+.ui-wrap a {
+	color: rgba(0, 0, 0, 0.4);
 }
 
 .command-input, .command-suggestion {
@@ -72,4 +75,46 @@ body {
 }
 ::-webkit-input-placeholder {
    color: rgba(255,255,255,0.5);
+}
+.about-wrap {
+	position: fixed;
+	left: 0; right: 0;
+	top: 0; bottom: 0;
+	background: skyblue;
+	text-align: center;
+	-webkit-clip-path: circle(0px at right 60px bottom 100px);
+	-webkit-clip-path: circle(30px at right 60px bottom 100px);
+	transition: 0.3s ease-out;
+}
+.is-loaded .about-wrap {
+	/*transition: 0.4s cubic-bezier(.71,1.7,.77,1.24) 0.4s;*/
+}
+.about-wrap.is-open {
+	transition: 0.3s ease-out;
+	-webkit-clip-path: circle(150vw at right 60px bottom 100px);
+}
+.about-btn, .about-close-btn {
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	right: 30px;
+	bottom: 70px;
+	text-align: center;
+	line-height: 60px;
+	font-size: 30px;
+	transition: 0.3s ease;
+	border: 2px solid rgba(255,255,255,0.9);
+}
+.about-close-btn {
+	opacity: 0;
+	visibility: hidden;
+}
+.about-wrap.is-open .about-btn {
+	opacity: 0;
+	visibility: hidden;
+}
+.about-wrap.is-open .about-close-btn {
+	opacity: 1;
+	visibility: visible;
 }

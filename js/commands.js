@@ -7,6 +7,7 @@ var COMMAND_END_CHAR = ';',
 	REGEX_EDIT = /edit/;
 	REGEX_RESTART = /restart/,
 
+	REGEX_SHOW_ABOUT = /(help|about)/;
 	REGEX_SHOW_CODE = /code/;
 
 var registeredCommands = [];

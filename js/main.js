@@ -12,13 +12,18 @@ var commandEl = document.querySelector('#js-command'),
 	commandSuggestionEl = document.querySelector('#js-command-suggestion'),
 	codeWrapEl = document.querySelector('#js-code-wrap'),
 	htmlCodeEl = document.querySelector('#js-html-code'),
-	cssCodeEl = document.querySelector('#js-css-code');
+	aboutOpenBtnEl = document.querySelector('#js-about-btn'),
+	aboutCloseBtnEl = document.querySelector('#js-about-close-btn'),
+	about = document.querySelector('#js-about');
+
 
 function handleKbdCommands () {
 	var match;
 
 	// Strip COMMAND_END_CHAR from end.
-	// currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+	if (currentKbdInput.match(/;$/)) {
+		currentKbdInput = currentKbdInput.substring(0, currentKbdInput.length - 1);
+	}
 
 	if (match = currentKbdInput.match(REGEX_CLEAR)) {}
 
@@ -43,6 +48,9 @@ function handleKbdCommands () {
 	}
 	else if (match = currentKbdInput.match(REGEX_SHOW_CODE)) {
 		showCode();
+	}
+	else if (match = currentKbdInput.match(REGEX_SHOW_ABOUT)) {
+		toggleAbout();
 	}
 }
 
@@ -217,6 +225,9 @@ function onKeyUp(e) {
 	if (e.which === 27) {
 		edit(null); // Unedit current element.
 		hideCode();
+		if (about.classList.contains('is-open')) {
+			toggleAbout();
+		}
 		commandEl.focus();
 		return;
 	}
@@ -250,6 +261,12 @@ function onMouseClick(e) {
 	selectElement(target);
 }
 
+function toggleAbout() {
+	about.classList.toggle('is-open');
+	if (!about.classList.contains('is-open')) {
+		commandEl.focus();
+	}
+}
 function init() {
 	var style = document.createElement('style');
 	style.type = 'text/css';
@@ -260,9 +277,12 @@ function init() {
 
 	superplaceholder({
 		el: commandEl,
-		sentences: [ 'Type in commands to create HTML', 'add div', 'border: 2px solid;'],
+		sentences: [
+			'Type in commands to create HTML', 'add div', 'border: 2px solid',
+			'Select elements using arrow keys'
+		],
 		options: {
-			letterDelay: 80,
+			letterDelay: 60,
 			loop: true,
 		}
 	});
@@ -270,6 +290,8 @@ function init() {
 	document.addEventListener('keydown', onKeyDown);
 	document.addEventListener('keyup', onKeyUp);
 	document.body.classList.add('is-loaded');
+	aboutOpenBtnEl.addEventListener('click', toggleAbout);
+	aboutCloseBtnEl.addEventListener('click', toggleAbout);
 	//window.addEventListener('click', onMouseClick);
 }
 
