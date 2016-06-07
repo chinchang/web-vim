@@ -74,6 +74,7 @@ function addElement(tag, insideWhat, html) {
 	if (!selectedEl) {
 		selectElement(el);
 	}
+	window._gaq && _gaq.push(['_trackEvent', 'webvim', 'add', tag]);
 }
 
 function removeElement(el) {
@@ -92,6 +93,7 @@ function addCSS(el, prop, value) {
 		rule;
 
 	$(selectedEl).css(prop, value);
+	window._gaq && _gaq.push(['_trackEvent', 'webvim', 'css', prop+'-'+value ]);
 }
 
 function edit(el) {
@@ -200,6 +202,7 @@ function showCode() {
 	Prism.highlightAll()
 
 	codeWrapEl.classList.add('show');
+	window._gaq && _gaq.push(['_trackEvent', 'webvim', 'show']);
 }
 
 function hideCode() {
@@ -269,6 +272,7 @@ function toggleAbout() {
 	if (!about.classList.contains('is-open')) {
 		commandEl.focus();
 	}
+	window._gaq && _gaq.push(['_trackEvent', 'webvim', 'help' ]);
 }
 function init() {
 	var style = document.createElement('style');
