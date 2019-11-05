@@ -93,6 +93,7 @@ body {
 	text-align: center;
 	-webkit-clip-path: circle(0px at right 60px bottom 100px);
 	-webkit-clip-path: circle(30px at right 60px bottom 100px);
+	clip-path: circle(30px at right 60px bottom 100px);
 	transition: 0.3s ease-out;
 }
 .is-loaded .about-wrap {
@@ -101,6 +102,7 @@ body {
 .about-wrap.is-open {
 	transition: 0.3s ease-out;
 	-webkit-clip-path: circle(150vw at right 60px bottom 100px);
+	clip-path: circle(150vw at right 60px bottom 100px);
 }
 .about-btn, .about-close-btn {
 	border-radius: 50%;
