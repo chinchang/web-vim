@@ -57,7 +57,7 @@ function handleKbdCommands () {
 function restart() {
 	// Remove all expect first child in BODY. Its out UI.
 	var children = [].slice.call(document.body.children, 1);
-	$(children).remove();
+	[...children].forEach(child => child.remove())
 
 	selectedEl = null;
 }
@@ -91,12 +91,12 @@ function addCSS(el, prop, value) {
 	var firstClass = el.classList[0],
 		rule;
 
-	$(selectedEl).css(prop, value);
+	selectedEl.style += `${prop}: ${value}`;
 }
 
 function edit(el) {
 	// Un-edit current element being edited.
-	var elementBeingEdited = $('[contentEditable=true]').get(0);
+	var elementBeingEdited = document.querySelector('[contentEditable=true]');
 	if (elementBeingEdited) {
 		elementBeingEdited.contentEditable = false;
 	}
