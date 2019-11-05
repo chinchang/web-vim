@@ -50,7 +50,6 @@ body {
 	padding: 10px;
 	border: 0;
 	color: white;
-	outline: 0;
 	width: 99vw;
 }
 .command-suggestion {
@@ -60,6 +59,7 @@ body {
 	opacity: 0.5;
 	z-index: -1;
 	pointer-events: none;
+	outline: 0;
 }
 
 .code-wrap {
